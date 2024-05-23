@@ -19,26 +19,19 @@
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            text-align: center;
         }
         h1 {
-            text-align: center;
             color: #4CAF50;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input, textarea, button {
+        input, button {
             padding: 10px;
             font-size: 16px;
             border-radius: 5px;
             border: 1px solid #ccc;
+            margin-top: 10px;
         }
-        input:focus, textarea:focus {
+        input:focus {
             border-color: #4CAF50;
             outline: none;
         }
@@ -52,67 +45,23 @@
         button:hover {
             background-color: #45a049;
         }
-        #records {
-            margin-top: 30px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            background-color: #f9f9f9;
-            margin: 10px 0;
-            padding: 10px;
-            border-left: 5px solid #4CAF50;
-            border-radius: 5px;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>トレーニング記録</h1>
-        <form id="training-form">
-            <label for="date">日付:</label>
-            <input type="date" id="date" name="date" required>
-            
-            <label for="exercise">エクササイズ名:</label>
-            <input type="text" id="exercise" name="exercise" placeholder="例: ベンチプレス" required>
-            
-            <label for="sets">セット数:</label>
-            <input type="number" id="sets" name="sets" placeholder="例: 3" required>
-            
-            <label for="weight">重量 (kg):</label>
-            <input type="number" id="weight" name="weight" placeholder="例: 50" required>
-            
-            <label for="reps">回数:</label>
-            <input type="number" id="reps" name="reps" placeholder="例: 10" required>
-            
-            <label for="notes">備考:</label>
-            <textarea id="notes" name="notes" placeholder="メモ"></textarea>
-            
-            <button type="submit">送信</button>
-        </form>
-        <div id="records">
-            <h2>記録一覧</h2>
-            <ul id="records-list"></ul>
-        </div>
+        <input type="text" id="username" placeholder="ユーザー名を入力" required>
+        <button onclick="goToUserPage()">記録ページへ</button>
     </div>
     <script>
-        document.getElementById('training-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const date = document.getElementById('date').value;
-            const exercise = document.getElementById('exercise').value;
-            const sets = document.getElementById('sets').value;
-            const weight = document.getElementById('weight').value;
-            const reps = document.getElementById('reps').value;
-            const notes = document.getElementById('notes').value;
-            
-            const record = document.createElement('li');
-            record.textContent = `${date} - ${exercise} - ${sets}セット - ${weight}kg - ${reps}回 - ${notes}`;
-            document.getElementById('records-list').appendChild(record);
-            
-            document.getElementById('training-form').reset();
-        });
+        function goToUserPage() {
+            const username = document.getElementById('username').value;
+            if (username) {
+                window.location.href = `user.html?username=${encodeURIComponent(username)}`;
+            } else {
+                alert('ユーザー名を入力してください');
+            }
+        }
     </script>
 </body>
 </html>
