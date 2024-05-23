@@ -45,6 +45,25 @@
         button:hover {
             background-color: #45a049;
         }
+        #users-list {
+            margin-top: 30px;
+            text-align: left;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 5px solid #4CAF50;
+            border-radius: 5px;
+        }
+        a {
+            text-decoration: none;
+            color: #4CAF50;
+        }
     </style>
 </head>
 <body>
@@ -52,16 +71,46 @@
         <h1>トレーニング記録</h1>
         <input type="text" id="username" placeholder="ユーザー名を入力" required>
         <button onclick="goToUserPage()">記録ページへ</button>
+        <div id="users-list">
+            <h2>ユーザー一覧</h2>
+            <ul id="users-list-ul"></ul>
+        </div>
     </div>
     <script>
         function goToUserPage() {
             const username = document.getElementById('username').value;
             if (username) {
+                addUserToList(username);
                 window.location.href = `user.html?username=${encodeURIComponent(username)}`;
             } else {
                 alert('ユーザー名を入力してください');
             }
         }
+
+        function addUserToList(username) {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            if (!users.includes(username)) {
+                users.push(username);
+                localStorage.setItem('users', JSON.stringify(users));
+                displayUsers();
+            }
+        }
+
+        function displayUsers() {
+            const usersList = document.getElementById('users-list-ul');
+            usersList.innerHTML = '';
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            users.forEach(user => {
+                const userItem = document.createElement('li');
+                const userLink = document.createElement('a');
+                userLink.href = `user.html?username=${encodeURIComponent(user)}`;
+                userLink.textContent = user;
+                userItem.appendChild(userLink);
+                usersList.appendChild(userItem);
+            });
+        }
+
+        displayUsers();
     </script>
 </body>
 </html>
