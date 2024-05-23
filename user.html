@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>トレーニング記録</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea, button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        input:focus, textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #records {
+            margin-top: 30px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 5px solid #4CAF50;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>トレーニング記録</h1>
+        <h2 id="user-greeting"></h2>
+        <form id="training-form">
+            <label for="date">日付:</label>
+            <input type="date" id="date" name="date" required>
+            
+            <label for="exercise">エクササイズ名:</label>
+            <input type="text" id="exercise" name="exercise" placeholder="例: ベンチプレス" required>
+            
+            <label for="sets">セット数:</label>
+            <input type="number" id="sets" name="sets" placeholder="例: 3" required>
+            
+            <label for="weight">重量 (kg):</label>
+            <input type="number" id="weight" name="weight" placeholder="例: 50" required>
+            
+            <label for="reps">回数:</label>
+            <input type="number" id="reps" name="reps" placeholder="例: 10" required>
+            
+            <label for="notes">備考:</label>
+            <textarea id="notes" name="notes" placeholder="メモ"></textarea>
+            
+            <button type="submit">送信</button>
+        </form>
+        <div id="records">
+            <h2>記録一覧</h2>
+            <ul id="records-list"></ul>
+        </div>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username');
+        document.getElementById('user-greeting').textContent = `${username}さんの記録`;
+
+        document.getElementById('training-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const date = document.getElementById('date').value;
+            const exercise = document.getElementById('exercise').value;
+            const sets = document.getElementById('sets').value;
+            const weight = document.getElementById('weight').value;
+            const reps = document.getElementById('reps').value;
+            const notes = document.getElementById('notes').value;
+
+            const recordsKey = `records-${username}`;
+            const records = JSON.parse(localStorage.getItem(recordsKey)) || [];
+
+            const record = {
+                date,
+                exercise,
+                sets,
+                weight,
+                reps,
+                notes
+            };
+
+            records.push(record);
+            localStorage.setItem(recordsKey, JSON.stringify(records));
+            displayRecords();
+            document.getElementById('training-form').reset();
+        });
+
+        function displayRecords() {
+            const recordsKey = `records-${username}`;
+            const records = JSON.parse(localStorage.getItem(recordsKey)) || [];
+            const recordsList = document.getElementById('records-list');
+            recordsList.innerHTML = '';
+            records.forEach(record => {
+                const recordItem = document.createElement('li');
+                recordItem.textContent = `${record.date} - ${record.exercise} - ${record.sets}セット - ${record.weight}kg - ${record.reps}回 - ${record.notes}`;
+                recordsList.appendChild(recordItem);
+            });
+        }
+
+        displayRecords();
+    </script>
+</body>
+</html>
